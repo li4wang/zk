@@ -301,6 +301,14 @@ type reconfigRequest struct {
 
 type reconfigReponse getDataResponse
 
+type getAllChildrenNumberRequest struct {
+	Path string
+}
+
+type getAllChildrenNumberResponse struct {
+	TotalNumber int32
+}
+
 func (r *multiRequest) Encode(buf []byte) (int, error) {
 	total := 0
 	for _, op := range r.Ops {
@@ -634,6 +642,8 @@ func requestStructForOp(op int32) interface{} {
 		return &multiRequest{}
 	case opReconfig:
 		return &reconfigRequest{}
+	case opGetAllChildrenNumber:
+		return &getAllChildrenNumberRequest{}
 	}
 	return nil
 }

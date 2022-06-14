@@ -1017,6 +1017,19 @@ func (c *Conn) Get(path string) ([]byte, *Stat, error) {
 	return res.Data, &res.Stat, err
 }
 
+// GetAllChildrenNumber gets all number of children nodes under a specific path.
+func (c *Conn) GetAllChildrenNumber(path string) (int32, error) {
+	if err := validatePath(path, false); err != nil {
+		return -1, err
+	}
+	res := &getAllChildrenNumberResponse{}
+	_, err := c.request(opGetAllChildrenNumber, &getAllChildrenNumberRequest{Path: path}, res, nil)
+	if err == ErrConnectionClosed {
+		return -1, err
+	}
+	return res.TotalNumber, err
+}
+
 // GetW returns the contents of a znode and sets a watch
 func (c *Conn) GetW(path string) ([]byte, *Stat, <-chan Event, error) {
 	if err := validatePath(path, false); err != nil {

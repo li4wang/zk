@@ -604,7 +604,7 @@ func TestAuth(t *testing.T) {
 	}
 }
 
-func TestChildren(t *testing.T) {
+func TestChildrenAndAllChildrenNumber(t *testing.T) {
 	ts, err := StartTestCluster(t, 1, nil, logWriter{t: t, p: "[ZKERR] "})
 	if err != nil {
 		t.Fatal(err)
@@ -654,6 +654,13 @@ func TestChildren(t *testing.T) {
 		t.Fatalf("Children returned error: %+v", err)
 	} else if len(children) != 10000 {
 		t.Fatal("Children returned wrong number of nodes")
+	}
+
+	allNumber, err := zk.GetAllChildrenNumber("/gozk-test-big")
+	if err != nil {
+		t.Fatalf("GetAllChildrenNumber return error: %+v", err)
+	} else if allNumber != 10000 {
+		t.Fatal("GetAllChildrenNumber returned wrong number of children nodes")
 	}
 }
 
